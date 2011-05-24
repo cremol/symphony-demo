@@ -1,0 +1,18 @@
+.farbtastic { position:relative; }
+.farbtastic * { position:absolute; cursor:crosshair; }
+.farbtastic, .farbtastic .wheel { width:195px; height:195px; }
+.farbtastic .color, .farbtastic .overlay { top:47px; left:47px; width:101px; height:101px; }
+.farbtastic .wheel { background:url(wheel.png) no-repeat; width:195px; height:195px; }
+.farbtastic .overlay { background:url(mask.png) no-repeat; }
+.farbtastic .marker { width:17px; height:17px; margin:-8px 0 0 -8px; overflow:hidden; background:url(marker.png) no-repeat; }
+
+#picker-container { z-index:100; width:197px; height:197px; position:absolute; background-color: transparent; }
+#picker { padding:20px; background-color:#353530; width:197px; height:197px;
+	-moz-border-radius: 10px; -webkit-border-radius: 10px; -moz-box-shadow: 2px 2px 10px #444; -webkit-box-shadow: 2px 2px 10px #444; }
+#picker-top { height:16px; background:transparent url(arrow.png) 7px 0 no-repeat; }
+#picker-bottom { display:none; }
+.color-chooser-container { margin-left:23px; position:relative; }
+.color-icon { width:20px; height:22px; background:transparent url(color_wheel.png) center center no-repeat; margin:2px 0 0 -24px; display:block; float:left; }
+#picker-container.top { margin-top:-5.3em; }
+#picker-container.top #picker-top { display:none; }
+#picker-container.top #picker-bottom { display:block; height:16px; background:transparent url(arrow-dn.png) 7px -2px no-repeat; }

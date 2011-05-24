@@ -1,0 +1,10 @@
+/* @override http://tonyarnold.local/extensions/ckeditor/assets/symphony.ckeditor.css */
+
+label div.cke_toolbox span {
+	display:inline;
+}
+
+/* Fix for Symphony 2.2: */
+table.cke_editor td, table.cke_dialog td {
+	padding-left: 0;
+}
