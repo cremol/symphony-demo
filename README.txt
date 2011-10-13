@@ -6,7 +6,7 @@ This ensemble is the result of a demo-site, that i made to explore some of Symph
 The design is insprired by symphony's back-end, but fully customizable. 
 You can experiment with body, header, menu and caption colors in the 'preferences' section.
 Also included a complete reference to the google webfont directory, so you can choose from over a hundred webfonts for website title and captions.
-Entering your favourite twitter username2 will display it's tweets on the homepage!
+Entering your favourite twitter username will display it's tweets on the homepage!
 
 Pages and a recursive navigation can be created through entries in the 'pages' section. 
 Choosing a parent page will create a multilevel menu. (credits)

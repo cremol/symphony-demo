@@ -1,8 +1,8 @@
 # CKEditor for Symphony CMS
 
- * Version: 1.2.1
- * CKEditor version: 3.5.3
- * Date: 13-04-2011
+ * Version: 1.2.3
+ * CKEditor version: 3.6.1
+ * Date: 18-08-2011
  * Authors: Tony Arnold <tony@thecocoabots.com>, Giel Berkers <info@gielberkers.com>
  * Repository: <http://github.com/kanduvisla/symphony-ckeditor/>
  * Requirements: Symphony CMS 2.2 or higher <http://github.com/symphony/symphony-2/tree/master>

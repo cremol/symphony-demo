@@ -2,36 +2,49 @@ if (typeof Symphony.ADMIN == "undefined") {
 	Symphony.ADMIN = window.location.toString().match(/^(.+\/symphony)/)[1];
 }
 
-
 jQuery(document).ready(function () {
-
-    // Set the configurationdata:
-    CKEDITOR.config.language = 'en';
-    CKEDITOR.config.skin = 'chris';
-    // CKEDITOR.config.height = this.offsetHeight;
-    CKEDITOR.config.removePlugins = 'font,styles';
-    CKEDITOR.config.startupOutlineBlocks = true;
-    CKEDITOR.config.replaceByClassEnabled = false;
-    CKEDITOR.config.toolbar =
-    [
-        ['Format'],
-        ['Bold', 'Italic', 'Strike', '-', 'Subscript', 'Superscript'],
-        ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', 'Blockquote'],
-        ['Link', 'Unlink'],
-        ['HorizontalRule'],
-        ['Source', 'Maximize']
-    ];
-    CKEDITOR.config.forcePasteAsPlainText = true;
-    CKEDITOR.config.format_tags = 'p;h1;h2;h3';
-    CKEDITOR.config.entities_processNumerical = 'force';
-    CKEDITOR.config.filebrowserBrowseUrl = Symphony.ADMIN + '/extension/ckeditor/filebrowser/';
-
 	// See if there are any ckeditor textareas:
-    jQuery('textarea.ckeditor').each(function(index) {
-		
-		// Disable replacing by class:
-		CKEDITOR.replaceByClassEnabled = false;
-		
+    jQuery('textarea.ckeditor, textarea.ckeditor_compact').each(function(index) {
+        // Set the configurationdata:
+        var configurationData = {};
+        configurationData.language = 'en';
+        configurationData.skin = 'chris';
+        configurationData.replaceByClassEnabled = false;
+        configurationData.forcePasteAsPlainText = true;
+        configurationData.format_tags = 'p;h1;h2;h3';
+        configurationData.entities_processNumerical = 'force';
+        configurationData.filebrowserBrowseUrl = Symphony.ADMIN + '/extension/ckeditor/filebrowser/';
+        // Set the correct height:
+        configurationData.height = jQuery(this).height();
+
+        // Check if this is the compact CKEditor:
+        if(jQuery(this).hasClass("ckeditor_compact"))
+        {
+            jQuery(this).parent().addClass("ck_compact");
+            configurationData.toolbar =
+            [
+                ['Bold', 'Italic', 'Strike', '-', 'Subscript', 'Superscript'],
+                ['Link', 'Unlink'],
+                ['Source']
+            ];
+            configurationData.resize_enabled = false;
+            configurationData.removePlugins = 'font,styles,elementspath';
+            configurationData.startupOutlineBlocks = false;
+        } else {
+            configurationData.toolbar =
+            [
+                ['Format'],
+                ['Bold', 'Italic', 'Strike', '-', 'Subscript', 'Superscript'],
+                ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', 'Blockquote'],
+                ['Link', 'Unlink'],
+                ['HorizontalRule'],
+                ['Source', 'Maximize']
+            ];
+            configurationData.resize_enabled = true;
+            configurationData.removePlugins = 'font,styles';
+            configurationData.startupOutlineBlocks = true;
+        }
+
 		// Set the objectname:
         var objectName = jQuery(this).attr('name');
 
@@ -48,9 +61,11 @@ jQuery(document).ready(function () {
                     breakAfterClose : true
                 });
 			}
+            // Add a border:
+            jQuery("label.ck_compact td.cke_contents").css({borderBottom: "1px solid #aaa"});
 		});
-		
+
 		// Replace CKEditor instances:
-        CKEDITOR.replace(objectName); //, configurationData);
+        CKEDITOR.replace(objectName, configurationData);
     });
 });

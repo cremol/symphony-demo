@@ -15,6 +15,7 @@
 			// Build the page:
 			$this->setTitle('Symphony - File Browser for CKEditor');
 			$this->addElementToHead(new XMLElement('meta', NULL, array('http-equiv' => 'Content-Type', 'content' => 'text/html; charset=UTF-8')), 0);
+            $this->addElementToHead(new XMLElement('meta', NULL, array('http-equiv' => 'X-UA-Compatible', 'content' => 'IE=edge,chrome=1')), 1);
 			$this->addStylesheetToHead(URL . '/symphony/assets/basic.css', 'screen', 68);
 			$this->addStylesheetToHead(URL . '/symphony/assets/admin.css', 'screen', 69);
 			$this->addStylesheetToHead(URL . '/extensions/ckeditor/assets/filebrowser.css', 'screen', 70);

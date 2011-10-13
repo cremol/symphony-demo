@@ -36,7 +36,7 @@
 	}
 
 	// Defines
-	define('kVERSION', '2.2.1');
+	define('kVERSION', '2.2.3');
 	define('kINSTALL_ASSET_LOCATION', './symphony/assets/installer');
 	define('kINSTALL_FILENAME', basename(__FILE__));
 	define('DOCROOT', rtrim(dirname(__FILE__), '\\/'));
@@ -182,12 +182,13 @@
 		$conf['symphony']['pagination_maximum_rows'] = '17';
 		$conf['symphony']['allow_page_subscription'] = '1';
 		$conf['symphony']['lang'] = 'en';
-		$conf['symphony']['version'] = '2.2.1';
+		$conf['symphony']['version'] = '2.2.3';
 		$conf['symphony']['pages_table_nest_children'] = 'yes';
 		$conf['symphony']['strict_error_handling'] = 'yes';
+		$conf['symphony']['session_gc_divisor'] = '10';
 		$conf['log']['archive'] = '1';
 		$conf['log']['maxsize'] = '102400';
-		$conf['general']['sitename'] = 'Symphony CMS demo';
+		$conf['general']['sitename'] = 'Symphony Demo';
 		$conf['image']['cache'] = '1';
 		$conf['image']['quality'] = '90';
 		$conf['database']['character_set'] = 'utf8';

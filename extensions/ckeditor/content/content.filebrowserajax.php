@@ -71,12 +71,11 @@
                                     $name = basename($info['file']);
                                 }
                                 $value = '<a href="/workspace'.$info['file'].'">';
+                                $a = explode('.', $info['file']);
+                                $ext = trim(strtolower($a[count($a)-1]));
                                 // Check if JIT is enabled:
                                 if($jitEnabled &&
-                                   ($info['mimetype'] == 'image/jpeg' ||
-                                   $info['mimetype'] == 'image/jpg' ||
-                                   $info['mimetype'] == 'image/png' ||
-                                   $info['mimetype'] == 'image/gif'))
+                                   ($ext == 'jpeg' || $ext == 'jpg' || $ext == '/png' || $ext == 'gif'))
                                 {
                                     $value .= '<img src="/image/2/100/100/5'.$info['file'].'" alt="thumb" width="100" height="100" />';
                                 } else {

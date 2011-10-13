@@ -97,10 +97,16 @@
 			if(page.find('div.dragger').size() == 0) {
 				$('body').append(dragger.hide());
 			}
+			else {
+				dragger = page.find('div.dragger');
+			}
 			
 			// Add drop helper
 			if(page.find('div.dropper').size() == 0) {
 				$('body').append(dropper.hide());
+			}
+			else {
+				dropper = page.find('div.dropper');
 			}
 		
 			// Store templates:
@@ -147,7 +153,9 @@
 			// Selecting
 			queue.delegate('li', 'click.stage', function() {
 				var item = $(this);
-				choose(item);
+				if(!item.is('.message')) {
+					choose(item);
+				}
 			});
 						
 			// Browsing
@@ -202,7 +210,7 @@
 								
 				// Not searching 
 				else {
-					queue.find('li').slideDown('fast');
+					queue.find('li').removeClass('found').show();
 					stage.trigger('searchstop');
 					stage.trigger('browsestart');
 					
@@ -228,7 +236,6 @@
 			
 			// Dragging & dropping
 			if(stage.is('.droppable')) {
-
 				selection.bind('orderstart', function(event, item) {
 					$('textarea').removeClass('droptarget');
 					move(item, event);
@@ -281,7 +288,9 @@
 				queue.find('li[data-value="' + item.attr('data-value') + '"]').trigger('choose');
 				
 				// Show item
-				item.appendTo(selection).slideDown('fast', function() {
+				item.appendTo(selection);
+				stage.trigger('constructanim', [item]);
+				item.slideDown('fast', function() {
 					selection.removeClass('constructing');
 					stage.trigger('constructstop', [item]);
 				});
@@ -300,7 +309,12 @@
 					
 					// It's possible that the empty message is a create template
 					if(empty.is('.template.create')) {
-						var empty_item = empty.clone().appendTo(selection).slideDown('fast').removeClass('template create empty');
+						stage.trigger('constructstart', [empty]);
+						var empty_item = empty.clone().appendTo(selection);
+						stage.trigger('constructanim', [empty_item]);
+						empty_item.slideDown('fast', function() {
+							stage.trigger('constructstop', [empty_item]);
+						}).removeClass('template create empty');
 						items = items.add(empty_item);
 					}
 					else {
@@ -312,6 +326,7 @@
 				queue.find('li[data-value="' + item.attr('data-value') + '"]').trigger('choose');
 
 				// Remove item
+				stage.trigger('destructanim', [item]);
 				item.addClass('destructing').slideUp('fast', function() {
 					item.remove();
 					items = items.not(item);
@@ -360,22 +375,17 @@
 			var search = function(strings) {
 				var queue_items = queue.find('li'),
 					size = 0;
-
-				// Build search index
-				if(!index) {
-					index = queue.find('li:not(.message)').map(function() {
-						return $(this).text().toLowerCase();
-					});
-				}
-				
+			
 				// Search
-				index.each(function(position, content) {
+				queue_items.hide().removeClass('found odd').each(function(position) {
 					var found = true,
-						current = queue_items.filter(':nth(' + position + ')');
+						current = $(this),
+						text = current.text();
 
 					// Items have to match all search strings
 					$.each(strings, function(count, string) {
-						if(content.search(string) == -1) {
+						var expression = new RegExp(string, 'i');
+						if(text.search(expression) == -1) {
 							found = false;
 						}
 					});
@@ -383,12 +393,12 @@
 					// Show matching items
 					if(found) {
 						size++;
-						current.slideDown('fast');
-					}
-
-					// Hide other items
-					else {
-						current.slideUp('fast');
+						current.addClass('found').show();
+						
+						// Restore zebra
+						if(size % 2 == 0) {
+							current.addClass('odd');
+						}
 					}
 				});
 				
@@ -445,6 +455,13 @@
 
 			// Drag and drop items
 			var move = function(item, event) {
+				
+				// Don't move messages
+				if(item.is('.message')) {
+					return true;
+				}
+			
+				// Start dragging
 				selection.addClass('dragging');
 				dragger.empty().append(item.html()).attr('data-value', item.attr('data-value')).find('.destructor').remove();
 				
