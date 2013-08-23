@@ -1,4 +1,3 @@
-Dweeps
 Symphony Demo
 Highly customizable and entry based pagebuilding
 
