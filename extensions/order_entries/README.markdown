@@ -1,10 +1,5 @@
 # Order Entries
 
-* Version: 1.9.7
-* Author: Nick Dunn (http://nick-dunn.co.uk)
-* Build Date: 2011-10-12
-* Requirements: Symphony 2.2
-
 ## Installation
 
 1. Upload the 'order_entries' folder in this archive to your Symphony 'extensions' folder.
@@ -14,5 +9,5 @@
 ## Usage
 
 1. Add the "Entry Order" field to your section and tick the "Show column" box.
-2. When viewing the section under the Publish menu, order the table by the Entry Order field.
+2. **Click the column heading to sort table** by the Entry Order field to enable drag and drop.
 3. When ordered ascending, drag entries within the table and the orders will be re-saved.

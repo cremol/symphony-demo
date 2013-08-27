@@ -46,6 +46,17 @@
 		protected $_head = array();
 
 		/**
+		 * Accessor function for `$this->_head`. Returns all the XMLElements that are
+		 * about to be added to `$this->Head`.
+		 *
+		 * @since Symphony 2.3.3
+		 * @return array
+		 */
+		public function Head() {
+			return $this->_head;
+		}
+
+		/**
 		 * Constructor for the HTMLPage. Intialises the class variables with
 		 * empty instances of XMLElement
 		 */
@@ -63,6 +74,7 @@
 		/**
 		 * Setter function for the `<title>` of a backend page. Uses the
 		 * `addElementToHead()` function to place into the `$this->_head` array.
+		 * Makes sure that only one title can be set.
 		 *
 		 * @see addElementToHead()
 		 * @param string $title
@@ -71,7 +83,9 @@
 		 */
 		public function setTitle($title){
 			return $this->addElementToHead(
-				new XMLElement('title', $title)
+				new XMLElement('title', $title),
+				null,
+				false
 			);
 		}
 
@@ -83,9 +97,9 @@
 		 *
 		 * @return string
 		 */
-		public function generate(){
+		public function generate($page = null){
 			$this->__build();
-			parent::generate();
+			parent::generate($page);
 			return $this->Html->generate(true);
 		}
 
@@ -124,10 +138,15 @@
 		 * @param integer $position
 		 *  Defaults to null which will put the `$object` at the end of the
 		 *  `$this->_head`.
+		 * @param boolean $allowDuplicate
+		 *  If set to false, make this function check if there is already an XMLElement that as the same name in the head.
+		 *  Defaults to true. @since Symphony 2.3.2
 		 * @return integer
 		 *  Returns the position that the `$object` has been set in the `$this->_head`
 		 */
-		public function addElementToHead(XMLElement $object, $position = null){
+		public function addElementToHead(XMLElement $object, $position = null, $allowDuplicate = true){
+
+			// find the right position
 			if(($position && isset($this->_head[$position]))) {
 				$position = General::array_find_available_index($this->_head, $position);
 			}
@@ -138,6 +157,12 @@
 					$position = 0;
 			}
 
+			// check if we allow duplicate
+			if (!$allowDuplicate && !empty($this->_head)) {
+				$this->removeFromHead($object->getName());
+			}
+
+			// append new element
 			$this->_head[$position] = $object;
 
 			return $position;
@@ -153,7 +178,19 @@
 			foreach($this->_head as $position => $element){
 				if($element->getName() != $elementName) continue;
 
-				unset($this->_head[$index]);
+				$this->removeFromHeadByPosition($position);
+			}
+		}
+
+		/**
+		 * Removes an item from `$this->_head` by it's index.
+		 *
+		 * @since Symphony 2.3.3
+		 * @param integer $position
+		 */
+		public function removeFromHeadByPosition($position) {
+			if(isset($position, $this->_head[$position])) {
+				unset($this->_head[$position]);
 			}
 		}
 
@@ -236,7 +273,7 @@
 		 *  query string.
 		 * @return string
 		 */
-		public function __buildQueryString(Array $exclude=array()){
+		public function __buildQueryString(array $exclude=array()){
 			$exclude[] = 'page';
 
 			// Generate the full query string and then parse it back to an array
@@ -247,7 +284,9 @@
 			// the query string again
 			$post_exclusion = array_diff_key($query, array_fill_keys($exclude, true));
 
-			return urldecode(http_build_query($post_exclusion, null, '&'));
+			$query = http_build_query($post_exclusion, null, '&');
+
+			return filter_var(urldecode($query), FILTER_FLAG_STRIP_LOW | FILTER_FLAG_STRIP_HIGH | FILTER_SANITIZE_STRING);
 		}
 
 	}

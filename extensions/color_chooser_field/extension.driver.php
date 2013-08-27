@@ -1,52 +1,44 @@
 <?php
 
-	Class extension_color_chooser_field extends Extension{
-	
-		public function about(){
-			return array('name' => 'Field: Color Chooser',
-						 'version' => '1.2.1',
-						 'release-date' => '2010-07-19',
-						 'author' => array('name' => 'Josh Nichols',
-										   'website' => 'http://www.joshnichols.com',
-										   'email' => 'mrblank@gmail.com'),
-						 'description'	=> 'A custom field extension for choosing colors.'
-				 		);
-		}
-		
+	Class Extension_Color_Chooser_Field extends Extension
+	{
+		private static $assets_loaded = false;
+
 		public function uninstall(){
-			$this->_Parent->Database->query("DROP TABLE `tbl_fields_colorchooser`");
+			try{
+				Symphony::Database()->query("DROP TABLE `tbl_fields_colorchooser`");
+			} catch( Exception $e ){
+			}
+
+			return true;
 		}
 
 		public function install(){
-
-			return $this->_Parent->Database->query("CREATE TABLE `tbl_fields_colorchooser` (
+			return Symphony::Database()->query("CREATE TABLE `tbl_fields_colorchooser` (
 			  `id` int(11) unsigned NOT NULL auto_increment,
 			  `field_id` int(11) unsigned NOT NULL,
 			  PRIMARY KEY  (`id`),
 			  UNIQUE KEY `field_id` (`field_id`)
-			) TYPE=MyISAM");
-
-		}
-		
-		public function getSubscribedDelegates() {
-			return array(
-				array(
-					'page'		=> '/backend/',
-					'delegate'	=> 'InitaliseAdminPageHead',
-					'callback'	=> 'initaliseAdminPageHead'
-				)
-			);
+			) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;");
 		}
 
-		public function initaliseAdminPageHead($context) {
-			$page = $context['parent']->Page;
+		public static function appendAssets(){
+			if( self::$assets_loaded === false
+				&& class_exists('Administration')
+				&& Administration::instance() instanceof Administration
+				&& Administration::instance()->Page instanceof HTMLPage
+			){
 
-            $page->addScriptToHead(URL . '/extensions/color_chooser_field/assets/jquery.farbtastic.js', 3001);
-            $page->addScriptToHead(URL . '/extensions/color_chooser_field/assets/jquery.tools.min.js', 3002);
-			$page->addScriptToHead(URL . '/extensions/color_chooser_field/assets/jquery.color-chooser.js', 3003);
-            $page->addStylesheetToHead(URL . '/extensions/color_chooser_field/assets/farbtastic.css', 'screen', 3004);
+				self::$assets_loaded = true;
+
+				$page = Administration::instance()->Page;
+
+				$page->addScriptToHead(URL.'/extensions/color_chooser_field/assets/jquery.farbtastic.js', 3001);
+				$page->addScriptToHead(URL.'/extensions/color_chooser_field/assets/jquery.tools.min.js', 3002);
+				$page->addScriptToHead(URL.'/extensions/color_chooser_field/assets/jquery.color-chooser.js', 3003);
+				$page->addStylesheetToHead(URL.'/extensions/color_chooser_field/assets/farbtastic.css', 'screen', 3004);
+			}
 		}
-			
 	}
 
 ?>

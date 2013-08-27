@@ -10,12 +10,19 @@
 		public function about() {
 			return array(
 				'name'			=> 'Debug DevKit',
-				'version'		=> '1.2.1',
-				'release-date'	=> '2011-07-03',
+				'version'		=> '1.2.4',
+				'release-date'	=> '2013-07-01',
 				'author'		=> array(
-					'name'			=> 'Rowan Lewis',
-					'website'		=> 'http://rowanlewis.com/',
-					'email'			=> 'me@rowanlewis.com'
+					array(
+						'name' => 'Symphony Team',
+						'website' => 'http://getsymphony.com/',
+						'email' => 'team@getsymphony.com'
+					),
+					array(
+						'name' => 'Rowan Lewis',
+						'website' => 'http://rowanlewis.com/',
+						'email' => 'me@rowanlewis.com'
+					)
 				)
 			);
 		}

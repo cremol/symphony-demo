@@ -16,3 +16,6 @@
 #picker-container.top { margin-top:-5.3em; }
 #picker-container.top #picker-top { display:none; }
 #picker-container.top #picker-bottom { display:block; height:16px; background:transparent url(arrow-dn.png) 7px -2px no-repeat; }
+
+
+.field-colorchooser input {background: none;}

@@ -2,7 +2,7 @@
 
 	require_once(TOOLKIT . '/class.datasource.php');
 
-	Class datasourcearticleds extends Datasource{
+	Class datasourcearticleds extends SectionDatasource {
 
 		public $dsParamROOTELEMENT = 'articleds';
 		public $dsParamORDER = 'desc';
@@ -13,48 +13,50 @@
 		public $dsParamREQUIREDPARAM = '$article';
 		public $dsParamSORT = 'system:id';
 		public $dsParamASSOCIATEDENTRYCOUNTS = 'no';
+		
 
 		public $dsParamFILTERS = array(
 				'28' => '{$page}, {$article}',
 		);
+		
 
 		public $dsParamINCLUDEDELEMENTS = array(
 				'title',
 				'image',
 				'description: formatted'
 		);
+		
 
-
-		public function __construct(&$parent, $env=NULL, $process_params=true){
-			parent::__construct($parent, $env, $process_params);
+		public function __construct($env=NULL, $process_params=true) {
+			parent::__construct($env, $process_params);
 			$this->_dependencies = array();
 		}
 
-		public function about(){
+		public function about() {
 			return array(
 				'name' => 'articleds',
 				'author' => array(
-					'name' => 'XpressZo print &amp; web',
-					'website' => 'http://www.xpresszo.com/symphony-demo',
+					'name' => 'martijn kremers',
+					'website' => 'http://localhost:8888/symphony-demo',
 					'email' => 'info@xpresszo.com'),
-				'version' => '1.0',
-				'release-date' => '2011-05-16T09:21:06+00:00'
+				'version' => 'Symphony 2.3.3',
+				'release-date' => '2013-08-26T19:28:42+00:00'
 			);
 		}
 
-		public function getSource(){
+		public function getSource() {
 			return '8';
 		}
 
-		public function allowEditorToParse(){
+		public function allowEditorToParse() {
 			return true;
 		}
 
-		public function grab(&$param_pool=NULL){
+		public function execute(array &$param_pool = null) {
 			$result = new XMLElement($this->dsParamROOTELEMENT);
 
 			try{
-				include(TOOLKIT . '/data-sources/datasource.section.php');
+				$result = parent::execute($param_pool);
 			}
 			catch(FrontendPageNotFoundException $e){
 				// Work around. This ensures the 404 page is displayed and
@@ -62,13 +64,11 @@
 				FrontendPageNotFoundExceptionHandler::render($e);
 			}
 			catch(Exception $e){
-				$result->appendChild(new XMLElement('error', $e->getMessage()));
+				$result->appendChild(new XMLElement('error', $e->getMessage() . ' on ' . $e->getLine() . ' of file ' . $e->getFile()));
 				return $result;
 			}
 
 			if($this->_force_empty_result) $result = $this->emptyXMLSet();
-
-			
 
 			return $result;
 		}

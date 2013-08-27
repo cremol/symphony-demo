@@ -11,6 +11,8 @@
 	omit-xml-declaration="yes"
 	encoding="UTF-8"
 	indent="yes" />
+	
+	<xsl:variable name="is-logged-in" select="/data/logged-in-author/author"/>
 
     <xsl:template match="/">
         <html>
@@ -54,7 +56,7 @@
                     </div>
                     <ul id="nav" class="shadow">
                         <li><a href="{$root}">Home</a></li>
-                        <xsl:apply-templates select="data/navds/entry[not(parent-page)]"/>
+                        <xsl:apply-templates select="data/navds/entry[not(parent-page/item)]"/>
                     </ul>
                     <div id="layout">
                         <xsl:apply-templates />

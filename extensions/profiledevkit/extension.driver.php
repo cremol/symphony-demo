@@ -7,19 +7,6 @@
 		
 		public static $active = false;
 		
-		public function about() {
-			return array(
-				'name'			=> 'Profile Devkit',
-				'version'		=> '1.0.4',
-				'release-date'	=> '2010-03-19',
-				'author'		=> array(
-					'name'			=> 'Rowan Lewis',
-					'website'		=> 'http://rowanlewis.com/',
-					'email'			=> 'me@rowanlewis.com'
-				)
-			);
-		}
-		
 		public function getSubscribedDelegates() {
 			return array(
 				array(
@@ -54,5 +41,3 @@
 			$xml->documentElement->appendChild($item);
 		}
 	}
-	
-?>

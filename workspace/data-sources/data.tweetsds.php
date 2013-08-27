@@ -2,48 +2,49 @@
 
 	require_once(TOOLKIT . '/class.datasource.php');
 
-	Class datasourcetweetsds extends Datasource{
+	Class datasourcetweetsds extends DynamicXMLDatasource {
 
 		public $dsParamROOTELEMENT = 'tweetsds';
 		public $dsParamURL = 'http://twitter.com/statuses/user_timeline/{$ds-generalsettingsds}.rss';
 		public $dsParamXPATH = '/';
 		public $dsParamCACHE = '2';
 		public $dsParamTIMEOUT = '6';
-
 		
 
 		
 
-		public function __construct(&$parent, $env=NULL, $process_params=true){
-			parent::__construct($parent, $env, $process_params);
+		
+
+		public function __construct($env=NULL, $process_params=true) {
+			parent::__construct($env, $process_params);
 			$this->_dependencies = array('$ds-generalsettingsds');
 		}
 
-		public function about(){
+		public function about() {
 			return array(
 				'name' => 'tweetsds',
 				'author' => array(
-					'name' => 'XpressZo print &amp; web',
-					'website' => 'http://www.xpresszo.com/symphony-demo',
+					'name' => 'martijn kremers',
+					'website' => 'http://localhost:8888/symphony-demo',
 					'email' => 'info@xpresszo.com'),
-				'version' => '1.0',
-				'release-date' => '2011-05-14T14:03:06+00:00'
+				'version' => 'Symphony 2.3.3',
+				'release-date' => '2013-08-26T19:18:25+00:00'
 			);
 		}
 
-		public function getSource(){
+		public function getSource() {
 			return 'dynamic_xml';
 		}
 
-		public function allowEditorToParse(){
+		public function allowEditorToParse() {
 			return true;
 		}
 
-		public function grab(&$param_pool=NULL){
+		public function execute(array &$param_pool = null) {
 			$result = new XMLElement($this->dsParamROOTELEMENT);
 
 			try{
-				include(TOOLKIT . '/data-sources/datasource.dynamic_xml.php');
+				$result = parent::execute($param_pool);
 			}
 			catch(FrontendPageNotFoundException $e){
 				// Work around. This ensures the 404 page is displayed and
@@ -51,13 +52,11 @@
 				FrontendPageNotFoundExceptionHandler::render($e);
 			}
 			catch(Exception $e){
-				$result->appendChild(new XMLElement('error', $e->getMessage()));
+				$result->appendChild(new XMLElement('error', $e->getMessage() . ' on ' . $e->getLine() . ' of file ' . $e->getFile()));
 				return $result;
 			}
 
 			if($this->_force_empty_result) $result = $this->emptyXMLSet();
-
-			
 
 			return $result;
 		}

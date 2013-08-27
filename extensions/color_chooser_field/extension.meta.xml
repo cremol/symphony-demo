@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<extension id="color_chooser_field" status="released" xmlns="http://symphony-cms.com/schemas/extension/1.0">
+	<name>Field: Color Chooser</name>
+
+	<description>Visually choose a hex color value</description>
+
+	<repo type="github">https://github.com/MrBlank/color_chooser_field</repo>
+
+	<url type="discuss">http://symphony-cms.com/discuss/thread/21375/</url>
+
+	<types>
+		<type>Field Types</type>
+	</types>
+
+	<authors>
+		<author>
+			<name github="MrBlank" symphony="MrBlank">Josh Nichols</name>
+			<website>http://www.joshnichols.com</website>
+		</author>
+		<author>
+			<name github="vlad-ghita" symphony="vladG">Vlad Ghita</name>
+			<email>vlad_micutul@yahoo.com</email>
+			<website>http://www.xanderadvertising.com</website>
+		</author>
+		<author>
+			<name github="PascalPiche" symphony="">Pascal Piche</name>
+			<website>http://www.deuxhuithuit.com</website>
+		</author>
+	</authors>
+
+	<media>
+		<item type="image" url="http://symphonyextensions.com/MrBlank/color_chooser_field/media/color_chooser_field.png">Field: Color Chooser: Visually choose a hex color value</item>
+	</media>
+
+	<releases>
+		<release version="1.3.2" date="2013-07-16" min="2.2"><![CDATA[
+			* Update for Symphony 2.3.3. Since the jQuery update, needs shim for jQuery Tooltip.
+		]]></release>
+		<release version="1.3.1" date="2012-06-20" min="2.2"><![CDATA[
+			* Restoring compatibility to symphony 2.2 while keeping compatibility with 2.3. Added extra output paremeters to the front-end xml result.
+			<FieldName r="decimalRedValue" g="decimalGreenValue", b="decimalBlueValue" has-color="Yes|No">#HexValue</FieldName>
+		]]></release>
+		<release version="1.3" date="2012-05-24" min="2.3"><![CDATA[
+			* Cleanup & Symphony 2.3 compatibility.
+		]]></release>
+
+		<release version="1.2.1" date="2010-07-19" min="2.0.5" />
+	</releases>
+
+</extension>

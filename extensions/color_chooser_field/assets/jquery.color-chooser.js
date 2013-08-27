@@ -1,4 +1,8 @@
 (function($) {
+	
+	// patch jquery for tooltip
+	$.browser = $.browser || {};
+	
 	$(document).ready(function() {
 		/*----Index page swatches----*/
 			// Find TDs that contain a '#'

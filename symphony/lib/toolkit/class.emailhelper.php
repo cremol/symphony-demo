@@ -12,9 +12,12 @@
 		/**
 		 * Folding an email header field body as required by RFC2822.
 		 *
-		 * @param string $input header field body string
-		 * @param string $max_length defaults to 75
-		 * @return string folded output string
+		 * @param string $input
+		 *  header field body string
+		 * @param integer $max_length
+		 *  defaults to 75
+		 * @return string
+		 *  folded output string
 		 */
 		public static function fold($input, $max_length=75) {
 			return @wordwrap($input, $max_length, "\r\n ");
@@ -44,12 +47,14 @@
 		 * except the first byte will have a leading '10' bit pattern,
 		 * which means an ASCII value >=128 and <=191.
 		 *
-		 * @param string $input string to encode
-		 * @param string $max_length maximum line length (default: 75 chars)
-		 * @return string $output encoded string
-		 *
 		 * @author Elmar Bartel
 		 * @author Michael Eichelsdoerfer
+		 * @param string $input
+		 *  string to encode
+		 * @param integer $max_length
+		 *  maximum line length (default: 75 chars)
+		 * @return string $output
+		 *  encoded string
 		 */
 		public static function qEncode($input, $max_length=75) {
 
@@ -129,12 +134,14 @@
 		 * as 'user relevant' line breaks and encodes them as RFC822 line
 		 * breaks as required by RFC2045.
 		 *
-		 * @param string $input string to encode
-		 * @param string $max_length maximum line length (default: 76 chars)
-		 * @return string $output encoded string
-		 *
 		 * @author Elmar Bartel
 		 * @author Michael Eichelsdoerfer
+		 * @param string $input
+		 *  string to encode
+		 * @param integer $max_length
+		 *  maximum line length (default: 76 chars)
+		 * @return string $output
+		 *  encoded string
 		 */
 		public static function qpContentTransferEncode($input, $max_length=76) {
 			$qpHexDigits  = '0123456789ABCDEF';
@@ -220,28 +227,27 @@
 		 * This function will encode attachments according to RFC2045.
 		 * Line length must not exceed the default (76 characters).
 		 *
-		 * @param string $data
-		 * @return void
 		 * @author Michael Eichelsdoerfer
+		 * @param string $data
+		 * @param integer $length
+		 * @return string
 		 */
 		public static function base64ContentTransferEncode($data, $length=76) {
 			return chunk_split(base64_encode($data), $length);
 		}
 
 		/**
-		 * Implode an array to a comma-separated list
+		 * Implodes an associative array or straight array to a
+		 * comma-separated string
 		 *
-		 * @param string $arr input array
+		 * @param array $array
 		 * @return string
 		 */
-		public static function arrayToList(array $arr = array()){
-			foreach($arr as $name => $email){
-				if(is_numeric($name)){
-					$return[] = $email;
-				}
-				else{
-					$return[] = $name . ' <' . $email . '>';
-				}
+		public static function arrayToList(array $array = array()){
+			foreach($array as $name => $email){
+				$return[] = empty($name)
+				            ? $email
+				            : $name . ' <' . $email . '>';
 			}
 			return implode(', ', $return);
 		}
@@ -250,69 +256,21 @@
 		 * Gets mime type of a file.
 		 *
 		 * For email attachments, the mime type is very important.
-		 * Uses the php 5.3 function (finfo_open), if this function is not found,
-		 * fallback to a fallback function.
-		 * Will use application/octet-stream as a fallback when no matches were found.
+		 * Uses the PHP 5.3 function `finfo_open` when available, otherwise falls
+		 * back to using a mapping of known of common mimetypes. If no matches
+		 * are found `application/octet-stream` will be returned.
 		 *
+		 * @deprecated This function is deprecated from the `EmailHelper` class,
+		 *  and has been moved to the `General` class. It is recommended to use
+		 *  `General::getMimeType` instead as it will be removed from here in the
+		 *  next major release.
+ 		 * @author Michael Eichelsdoerfer
+		 * @author Huib Keemink
 		 * @param string $file
 		 * @return string MIMEtype
-		 * @author Michael Eichelsdoerfer
-		 * @author Huib Keemink
 		 */
 		public function getMimeType($file) {
-			if (!empty($file)) {
-				// in PHP 5.3 we can use 'finfo'
-				if (function_exists('finfo_open')) {
-					$finfo = finfo_open(FILEINFO_MIME_TYPE);
-					$mime_type = finfo_file($finfo, $file);
-					finfo_close($finfo);
-				}
-				/**
-				 * fallback
-				 * this may be removed when Symphony requires PHP 5.3
-				 */
-				else{
-					// A few mimetypes to "guess" using the file extension.
-					$mimetypes = array(
-						'txt'	=> 'text/plain',
-						'csv'	=> 'text/csv',
-						'pdf'	=> 'application/pdf',
-						'doc'	=> 'application/msword',
-						'docx'	=> 'application/msword',
-						'xls'	=> 'application/vnd.ms-excel',
-						'ppt'	=> 'application/vnd.ms-powerpoint',
-						'eps'	=> 'application/postscript',
-						'zip'	=> 'application/zip',
-						'gif'	=> 'image/gif',
-						'jpg'	=> 'image/jpeg',
-						'jpeg'	=> 'image/jpeg',
-						'png'	=> 'image/png',
-						'mp3'	=> 'audio/mpeg',
-						'mp4a'	=> 'audio/mp4',
-						'aac'	=> 'audio/x-aac',
-						'aif'	=> 'audio/x-aiff',
-						'aiff'	=> 'audio/x-aiff',
-						'wav'	=> 'audio/x-wav',
-						'wma'	=> 'audio/x-ms-wma',
-						'mpeg'	=> 'video/mpeg',
-						'mpg'	=> 'video/mpeg',
-						'mp4'	=> 'video/mp4',
-						'mov'	=> 'video/quicktime',
-						'avi'	=> 'video/x-msvideo',
-						'wmv'	=> 'video/x-ms-wmv',
-					);
-					$extension = substr(strrchr($file, '.'), 1);
-					if($mimetypes[strtolower($extension)] != null){
-						$mime_type = $mimetypes[$extension];
-					}
-					else{
-						$mime_type = 'application/octet-stream';
-					}
-				}
-
-				return $mime_type;
-			}
-			return false;
+			return General::getMimeType($file);
 		}
 
 	}

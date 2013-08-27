@@ -38,7 +38,12 @@
     
     <xsl:template match="blogds/entry">
         <li class="blogli">
-            <div class="blogtitle float"><h4><a href="{$root}/blog-entry/{title/@handle}/#comments"><xsl:value-of select="title"/></a></h4></div>
+            <div class="blogtitle float">
+            	<h4><a href="{$root}/blog-entry/{title/@handle}/#comments"><xsl:value-of select="title"/></a></h4>
+				<xsl:if test="$is-logged-in">
+			 		<div class="edit" onclick="return MM_openBrWindow('{$root}/symphony/publish/blog/edit/{current()/@id}/','SymphonyCMS','scrollbars=yes,resizable=yes,width=1300,height=800')">Edit</div>
+			 	</xsl:if>
+            </div>
            	<xsl:if test="(image/filename != '')">
           		<img src="{$root}/image/2/700/410/5/images/{image/filename}" alt="{title}" title="{title}" class="galleryimg"/>
            	</xsl:if>

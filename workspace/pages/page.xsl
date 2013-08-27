@@ -15,14 +15,14 @@
     	<div id="content">
         	<xsl:attribute name="style">
           	<xsl:choose>
-             	<xsl:when test="/data/baseds/entry/sidebar/@items != ''">width:520px;</xsl:when>
+             	<xsl:when test="/data/baseds/entry/sidebar/@items &gt; '0'">width:520px;</xsl:when>
                	<xsl:otherwise>width:870px;</xsl:otherwise>
            	</xsl:choose>
          	</xsl:attribute>    
             <xsl:apply-templates select="baseds/entry"/>
             <div class="slideshowcontainer">
             	<div class="prevnext">
-               	<xsl:if test="/data/baseds/entry/slideshow/@items != ''">
+               	<xsl:if test="/data/baseds/entry/slideshow/@items &gt; '0'">
                     <xsl:choose>
                     <xsl:when test="/data/baseds/entry/slideshow/@items='1'">
                     </xsl:when>  
@@ -37,7 +37,7 @@
                 </ul>
             </div>    
        	</div>
-        <xsl:if test="/data/baseds/entry/sidebar/@items != ''">
+        <xsl:if test="/data/baseds/entry/sidebar/@items &gt; '0'">
         <div id="sidebar">
         	<div class="blogtitle">
         		<h4>Items:</h4>
@@ -52,6 +52,9 @@
     <xsl:template match="baseds/entry">
     	<div class="blogtitle float">
             <h4><xsl:value-of select="title"/></h4>
+            <xsl:if test="$is-logged-in">
+			 	<div class="edit" onclick="return MM_openBrWindow('{$root}/symphony/publish/pages/edit/{current()/@id}/','SymphonyCMS','scrollbars=yes,resizable=yes,width=1300,height=800')">Edit</div>
+			 </xsl:if>
 		</div>
       	<div class="blogcontent">
         	<xsl:copy-of select="content"/>
@@ -67,7 +70,7 @@
        			<img src="{$root}/image/1/850/0/images/{image/filename}" alt="{title}" title="{title}" class="galleryimg">
                 <xsl:attribute name="style">
                 <xsl:choose>
-                    <xsl:when test="/data/baseds/entry/sidebar/@items != ''">width:520px;</xsl:when>
+                    <xsl:when test="/data/baseds/entry/sidebar/@items &gt; '0'">width:520px;</xsl:when>
                     <xsl:otherwise>width:100%;</xsl:otherwise>
            		</xsl:choose>
                 </xsl:attribute>

@@ -2,31 +2,21 @@
 
 	Class extension_selectbox_link_field extends Extension{
 
-		public function about(){
-			return array(
-				'name' => 'Field: Select Box Link',
-				'version' => '1.20',
-				'release-date' => '2011-08-01',
-				'author' => array(
-					'name' => 'Symphony Team',
-					'website' => 'http://www.symphony-cms.com',
-					'email' => 'team@symphony-cms.com'
-				)
-			);
-		}
-
 		public function install(){
 			try{
-				Symphony::Database()->query("CREATE TABLE IF NOT EXISTS `tbl_fields_selectbox_link` (
-					  `id` int(11) unsigned NOT NULL auto_increment,
-					  `field_id` int(11) unsigned NOT NULL,
-					  `allow_multiple_selection` enum('yes','no') NOT NULL default 'no',
-					  `show_association` enum('yes','no') NOT NULL default 'yes',
-					  `related_field_id` VARCHAR(255) NOT NULL,
-					  `limit` int(4) unsigned NOT NULL default '20',
-				  PRIMARY KEY  (`id`),
-				  KEY `field_id` (`field_id`)
-				)");
+				Symphony::Database()->query("
+					CREATE TABLE IF NOT EXISTS `tbl_fields_selectbox_link` (
+						`id` int(11) unsigned NOT NULL auto_increment,
+						`field_id` int(11) unsigned NOT NULL,
+						`allow_multiple_selection` enum('yes','no') NOT NULL default 'no',
+						`show_association` enum('yes','no') NOT NULL default 'yes',
+						`hide_when_prepopulated` enum('yes','no') NOT NULL default 'no',
+						`related_field_id` VARCHAR(255) NOT NULL,
+						`limit` int(4) unsigned NOT NULL default '20',
+						PRIMARY KEY  (`id`),
+						KEY `field_id` (`field_id`)
+					) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+				");
 			}
 			catch(Exception $e){
 				return false;
@@ -44,12 +34,22 @@
 			return false;
 		}
 
-		public function update($previousVersion){
+		public function update($previousVersion = false){
+			try{
+				if(version_compare($previousVersion, '1.27', '<')){
+					Symphony::Database()->query(
+						"ALTER TABLE `tbl_fields_selectbox_link` ADD `hide_when_prepopulated` ENUM('yes','no') DEFAULT 'no'"
+					);
+				}
+			}
+			catch(Exception $e){
+				// Discard
+			}
+
 			try{
 				if(version_compare($previousVersion, '1.6', '<')){
 					Symphony::Database()->query(
-						"ALTER TABLE `tbl_fields_selectbox_link`
-						ADD `limit` INT(4) UNSIGNED NOT NULL DEFAULT '20'"
+						"ALTER TABLE `tbl_fields_selectbox_link` ADD `limit` INT(4) UNSIGNED NOT NULL DEFAULT '20'"
 					);
 				}
 			}

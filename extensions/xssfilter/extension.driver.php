@@ -5,12 +5,12 @@
 		public function about() {
 			return array(
 				'name' => 'Cross-Site Scripting (XSS) Filter',
-				'version' => '1.1',
-				'release-date' => '2011-06-29',
+				'version' => '1.2',
+				'release-date' => '2013-07-01',
 				'author' => array(
 					'name' => 'Symphony Team',
-					'website' => 'http://symphony-cms.com/',
-					'email' => 'team@symphony-cms.com'
+					'website' => 'http://getsymphony.com/',
+					'email' => 'team@getsymphony.com'
 				),
 				'description' => 'Protect yourself against XSS attacks in form submissions.'
 			);
@@ -109,8 +109,9 @@
 		public static function detectXSS($string) {
 			$contains_xss = FALSE;
 
-			if(!is_string($string)) {
-				throw new Exception(__('Passed parameter is not a string.'));
+			// Skip any null or non string values
+			if(is_null($string) || !is_string($string)) {
+				return $contains_xss;
 			}
 
 			// Keep a copy of the original string before cleaning up
@@ -137,7 +138,7 @@
 				'#(<[^>]+[\x00-\x20\"\'\/])(on|xmlns)[^>]*>?#iUu',
 
 				// Match javascript:, livescript:, vbscript: and mocha: protocols
-				'!((java|live|vb)script|mocha):(\w)*!iUu',
+				'!((java|live|vb)script|mocha|feed|data):(\w)*!iUu',
 				'#-moz-binding[\x00-\x20]*:#u',
 
 				// Match style attributes
